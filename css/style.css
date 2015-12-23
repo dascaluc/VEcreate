@@ -1,0 +1,143 @@
+#wrap {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px 20px 40px;
+    background: #000;
+    color: #FFF;
+}
+.clear {
+    clear: both;
+}
+#controlls {
+    float: left;
+}
+#controlls nav, #items nav {
+    position: relative;
+    float: left;
+}
+#controlls nav .menu {
+    border-radius: 50%;
+    background-color: yellow;
+    margin-bottom: 0;
+    width: 10px;
+    height: 10px;
+    transform: scale(1.2);
+    border: 1px solid #FFF;
+    padding: 5px;
+    cursor: pointer;
+}
+#controlls nav ul, #items nav ul {
+    position: absolute;
+}
+#items nav ul {
+    left: 10px;
+    top: 24px;
+    z-index: 10;
+}
+nav ul li {
+    background-color: #bbb;
+    border-radius: 50%;
+    height: 18px;
+    list-style-type: none;
+    margin: 5px 3px;
+    width: 18px;
+    cursor: pointer;
+    transform: scale(1.2);
+}
+#items nav ul li:hover {
+    background-color: #f73;
+}
+#controlls nav ul li:hover {
+    background-color: yellow;
+}
+#has_prefix, #has_sufix, #has_um, .menu_items {
+    float: left;
+    margin-left: 10px;
+}
+#items .menu_items {
+    border-radius: 50%;
+    background-color: orange;
+    margin-bottom: 0;
+    width: 10px;
+    height: 10px;
+    transform: scale(1.2);
+    border: 1px solid #FFF;
+    padding: 5px;
+    cursor: pointer;
+}
+#items {
+    float: left;
+    margin-left: 10px;
+}
+#items li {
+    margin-bottom: 10px;
+}
+#items .ve-text {
+    margin-left: 10px;
+}
+.ui-icon-trash.delete_all {
+    transform: scale(2.5);
+    margin: 0 15px;
+    float: left;
+}
+.ui-icon-cancel.empty_all {
+    transform: scale(2.5);
+    margin: 0 15px;
+    float: left;
+}
+#readonly_container {
+    margin-left: 20px;
+}
+.ui-icon-cancel.empty_item {
+    transform: scale(2.5);
+    margin: 0 10px;
+    float: left;
+}
+
+
+
+
+
+.newEl {
+    padding: 20px;
+    background: #bbb;
+    border: 1px solid #000;
+}
+.newEl span {
+    cursor: pointer;
+    border: 1px solid #000;
+    padding: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.newEl .main_input {
+    margin-right: 5px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+li {
+    list-style-type: none;
+}
+.hidden {
+    display: none !important;
+}
+.newEl .move_up.new,
+.newEl .move_down.new{
+    display: inline-block;
+}
+/*
+.ui-icon-trash {
+    padding: 0 !important;
+    transform: scale(2.5);
+    border: none !important;
+    margin: 5px 15px 0 0 !important;
+}
+.ui-icon-cancel {
+    border: medium none !important;
+    margin: 5px 15px 0 0 !important;
+    padding: 0 !important;
+    transform: scale(2.5);
+}*/
