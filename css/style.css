@@ -50,7 +50,7 @@ nav ul li {
 #controlls nav ul li:hover {
     background-color: yellow;
 }
-#has_prefix, #has_sufix, #has_um, .menu_items {
+.has_prefix, .has_sufix, .has_um, .menu_items {
     float: left;
     margin-left: 10px;
 }

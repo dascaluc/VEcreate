@@ -3,8 +3,10 @@
     <title>VE create component</title>
     <link type="text/css" rel="stylesheet" href='css/style.css'>
     <link type="text/css" rel="stylesheet" href='css/jquery-ui.css'>
+    <link type="text/css" rel="stylesheet" href='css/jquery.modal.css'>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="js/jquery.modal.min.js"></script>
     <script src="js/script.js"></script>
 </head>
 <body>
@@ -20,6 +22,7 @@
             data-hassufix="true"
             data-minlist="2"
             data-maxlist="6"
+            data-defaultum="2m"
             data-deletetable="true"
             data-revertable="true">
             <input type="hidden" id="empty_all_flag" value="false">
@@ -41,7 +44,7 @@
             <span id="readonly_container" style="display:none;"></span>
         </div>
         <div id="dymanic_content">
-            <select id="has_prefix">
+            <select class="has_prefix">
                 <option value="1m" selected>1m</option>
                 <option value="2m">2m</option>
                 <option value="3m">3m</option>
@@ -68,6 +71,11 @@
                     <input type="hidden" class="empty_flag" value="false" />
                     <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
                     <input type="hidden" class="deleted_flag" value="false" />
+                    <select class="has_um_item">
+                        <option value="1m">1m</option>
+                        <option value="2m" selected>2m</option>
+                        <option value="3m">3m</option>
+                    </select>
                     <div class="clear"></div>
                     <!--  End of Input field with hidden flags  -->
                 </li>
@@ -87,11 +95,11 @@
                     </nav>
                     <!--  Input field with hidden flags -->
                     <input type="text" class="ve-text" id="item_2" value="initial value 2"/>
-                    <input type="hidden" class="position" value="1"/>
+                    <input type="hidden" class="position" value="2"/>
                     <input type="hidden" class="empty_flag" value="false" />
                     <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
                     <input type="hidden" class="deleted_flag" value="false" />
-                    <select id="has_um_item">
+                    <select class="has_um_item">
                         <option value="1m">1m</option>
                         <option value="2m" selected>2m</option>
                         <option value="3m">3m</option>
@@ -101,12 +109,12 @@
                 </li>
                 <!--  End of LI  -->
             </ul>
-            <select id="has_um">
+            <select class="has_um">
                     <option value="1m">1m</option>
                     <option value="2m" selected>2m</option>
                     <option value="3m">3m</option>
             </select>
-            <select id="has_sufix">
+            <select class="has_sufix">
                 <option value="1m">1m</option>
                     <option value="2m">2m</option>
                     <option value="3m" selected>3m</option>
@@ -114,5 +122,8 @@
             <div class="clear"></div>
        </div>
     </div>
+    
+
+
 </body>
 </html>

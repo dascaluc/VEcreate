@@ -11,6 +11,7 @@ $(document).ready(function(){
     var minlist = $('#controlls').data('minlist');
     var deletetable = $('#controlls').data('deletetable');
     var revertable = $('#controlls').data('revertable');
+    var defaultUm = $('#controlls').data('defaultum');
     var hasPrefix = $('#controlls').data('hasprefix');
     var hasSufix = $('#controlls').data('hassufix');
     var hasUm = $('#controlls').data('hasum');
@@ -20,35 +21,65 @@ $(document).ready(function(){
     var deleted_all_flag = 0;
     var empty_all_flag = 0;
     var dirtyFlag = 0;
+    var total_li = $('.item').length;           // Get the LI number
+    var currentIdNumber = minlist + 1;    //  Get the number of the minimum items, add 1 and store it as the item ID
     //  Get the initial values for each input
     var initialValues = [];
+    var initialValuesUMitem = [];
     $('.ve-text').each(function(){
         initialValues.push($(this).val());
+        
+        if (hasUmItem === true) {
+            initialValuesUMitem.push($(this).closest('.item').find('.has_um_item').val());
+        }
+        
     });
     console.log(initialValues);
+    console.log(initialValuesUMitem);
+    //  Set the position of each item
+    var setPosition = function(){
+        $('.ve-text').each(function(index){
+            var itemPosition = index + 1;
+            $(this).closest('.item').find('.position').val(itemPosition);
+        });
+    }
+    //  Call the function on page load
+    setPosition();
     var readonlyVal = '';       //  Definig the variable globally
+    
+     //  Dirty flag
+    $(document).on('change', 'input, select', function(){
+        dirtyFlag = 1;
+        $('#wrap').addClass('dirtyField');
+    });
+    $(document).on('click', 'nav li', function(){
+        dirtyFlag = 1;
+        $('#wrap').addClass('dirtyField');
+        console.log(dirtyFlag);
+    });
+    
     var EditableSwitch = function() {
         readonlyVal = '';       //  Empty the variable before each execution of the EditableSwitch function
         //  The readonly output text
         if (hasPrefix === true) {
-            readonlyVal += $('#has_prefix').val();
+            readonlyVal += $('.has_prefix').val();
         }
         readonlyVal += ' ';
         $('.ve-text').each(function(){
             readonlyVal += ($(this).val());
-            var hasUmItem = $(this).nextAll('#has_um_item');
+            var hasUmItemVal = $(this).nextAll('.has_um_item');
             readonlyVal += ' ';
-            if (hasUmItem.val() != undefined) {
-                readonlyVal += hasUmItem.val();
+            if (hasUmItemVal.val() != undefined) {
+                readonlyVal += hasUmItemVal.val();
             }
             readonlyVal += ' // ';
         });
-        if (hasUm === true) {
-            readonlyVal += $('#has_um').val();
+        if ((hasUm === true) && (hasUmItem != true)) {
+            readonlyVal += $('.has_um').val();
         }
         readonlyVal += ' ';
         if (hasSufix === true) {
-            readonlyVal += $('#has_sufix').val();
+            readonlyVal += $('.has_sufix').val();
         }
         readonlyVal += ' ';
         $('#readonly_container').html(readonlyVal);
@@ -56,12 +87,24 @@ $(document).ready(function(){
     EditableSwitch();
     
     //  On page load, check if the Editable Flag is ON or OFF and display the proper content
-    if(editable_flag === 0) {
+    if (editable_flag === 0) {
         $('#dymanic_content').hide();
         $('.toggle_delete_all, .toggle_empty_all, .revert_all').hide();
         $('#readonly_container').show();
     }
-    
+    //  On page load, check if 'hasum' is true or not and make the proper adjustments
+    if (hasUm === true) {
+        if (hasUmItem === true) {
+            //  Only Has UM for each item exists
+            $('.has_um').remove();
+        } else {
+            //  Only Has UM for the entire component exists
+            $('.has_um_item').remove();
+        }
+    } else {
+        $('.has_um').remove();
+    }
+
     //  Menu functionality
     $(document).on('mouseover', 'nav', function(){
         $(this).children('ul').removeClass('hidden');
@@ -73,13 +116,13 @@ $(document).ready(function(){
      *  Remove elements depending on the data-* attributes 
      */
     if (hasPrefix === false) {
-        $('#has_prefix').remove();
+        $('.has_prefix').remove();
     }
     if (hasSufix === false) {
-        $('#has_sufix').remove();
+        $('.has_sufix').remove();
     }
     if (hasUm === false) {
-        $('#has_um').remove();
+        $('.has_um').remove();
     }
     
      /*
@@ -144,6 +187,28 @@ $(document).ready(function(){
         }
     });
     
+    //  Initial values that will be used for tghe 'Revert all' functionality
+    var $prefix = $('.has_prefix').val();
+    var $sufix = $('.has_sufix').val();
+    var $um = $('.has_um').val();
+    var revertedComponent = $('#items').html();        //  The content of the initial component
+    console.log(revertedComponent);
+    //  Revert to initial state for the entire component
+    $(document).on('click', '.revert_all', function(){
+        $('.has_prefix').val($prefix);
+        $('.has_sufix').val($sufix);
+        $('.has_um').val($um);
+        //$('.new_item').remove();
+        $('#items').html(revertedComponent);
+        total_li = minlist;
+        setPlusMinus();
+        setArrows();
+        //setPosition();
+        
+        dirtyFlag = 0;
+        $('#wrap').removeClass('dirtyField');
+    });
+    
      /*
      *   The MOVE UP and MOVE DOWN functionality for the list items
      */
@@ -171,13 +236,28 @@ $(document).ready(function(){
     }
     //  Call the function on page load
     setArrows();
-       
+
+    //  The function which removes "+" and/or "-" depending on the number ot the items
+    var setPlusMinus = function(){
+        if (total_li <= minlist) {
+            $('.delete_item').addClass('hidden');
+        } else if (total_li >= maxlist) {
+            $('.add_more').addClass('hidden');
+        } else {
+            $('.delete_item').removeClass('hidden');
+            $('.add_more').removeClass('hidden');
+        }
+    }
+    //  Call the function on page load
+    setPlusMinus();
+    
     //  Switch 2 list items on click on the DOWN arrow
     $(document).on('click', '.move_down', function(){
         var $liAsParent = $(this).closest('.item');
         $liAsParent.before($liAsParent.next());
         $liAsParent.after($liAsParent.next());
         setArrows();
+        setPosition();
     });
     //  Switch 2 list items on click on the UP arrow
     $(document).on('click', '.move_up', function(){
@@ -185,15 +265,15 @@ $(document).ready(function(){
         $liAsParent.before($liAsParent.prev());
         $liAsParent.after($liAsParent.prev());
         setArrows();
+        setPosition();
     });
 
     /*
      *  Adding a new element on click
      */
-    var total_li = $('.item').length;           // Get the LI number
     $(document).on('click', '.add_more', function(){          
         if (total_li < maxlist) {
-            var newItem =   '<li class="item">' +
+            var newItem =   '<li class="item new_item">' +
                             '<nav>' +
                                 '<span class="menu_items ui-icon ui-icon-gear"></span>' +
                                 '<ul class="hidden">' +
@@ -205,35 +285,45 @@ $(document).ready(function(){
                                     '<li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>' +
                                 '</ul>' +
                             '</nav>' +
-                                '<input type="text" class="ve-text" value=""/>' +
-                                '<input type="hidden" class="position" value="1"/>' +
+                                '<input type="text" id="item_' + currentIdNumber + '" class="ve-text" value="" />' +
+                                '<input type="hidden" class="position" value=""/>' +
                                 '<input type="hidden" class="empty_flag" value="false" />' +
                                 '<span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>' +
-                                '<input type="hidden" class="deleted_flag" value="false" />' +
-                                '<div class="clear"></div> ' +
+                                '<input type="hidden" class="deleted_flag" value="false" />';
+                                if (hasUmItem === true) {
+                    newItem += '<select class="has_um_item default_um" style="margin-left:4px;">' +
+                                    '<option value="1m">1m</option>' +
+                                    '<option value="2m">2m</option>' +
+                                    '<option value="3m">3m</option>' +
+                                '</select>';
+                                }
+                    newItem += '<div class="clear"></div> ' +
                             '</li>';
             $(this).closest('.item').after(newItem);  //appending the new element right after the parent element of the clicked item
+            $('.default_um').val(defaultUm);
             total_li++;
+            currentIdNumber++;
             setArrows();
+            setPosition();
+            setPlusMinus();
+            
         }else{
-            alert("Number of maximum inputs reached!");
         }
     });
     
     //  Delete individual item
     $(document).on('click', '.delete_item', function(){
-        if (total_li <= minlist) {
-            alert("You must have at least " + minlist + " items.");
-        } else {
             $(this).closest('.item').remove();
             total_li--;
             setArrows();
-        }
+            setPosition();
+            setPlusMinus();
     });
 
     //  Set/Unset Empty for individual items
     $(document).on('click', '.toggle_empty', function(){
         $(this).closest('.item').find('.ve-text').toggle();
+        $(this).closest('.item').find('.has_um_item').toggle();
         $(this).closest('.item').find('.empty_item').toggle();
         var emptyFlagItem = $(this).closest('.item').find('.empty_flag');
         var emptyFlagItemVal = emptyFlagItem.val();
@@ -252,18 +342,12 @@ $(document).ready(function(){
         $(this).closest('.item').find('.ve-text').val('');
     });
     
-    //  Dirty flag
-    $(document).on('change', 'input, select', function(){
-        dirtyFlag = 1;
-        $('#wrap').addClass('dirtyField');
-        //$('#dirty_all_flag').val('true');
-        console.log(dirtyFlag);
-    });
-    $(document).on('click', 'nav li', function(){
-        dirtyFlag = 1;
-        $('#wrap').addClass('dirtyField');
-        //$('#dirty_all_flag').val('true');
-        console.log(dirtyFlag);
+    $('#wrap').on('click', function(){
+        $('#items').modal({
+            escapeClose: false,
+            clickClose: true
+        });
+        return false;
     });
    
     
