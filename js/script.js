@@ -34,8 +34,6 @@ $(document).ready(function(){
         }
         
     });
-    console.log(initialValues);
-    console.log(initialValuesUMitem);
     //  Set the position of each item
     var setPosition = function(){
         $('.ve-text').each(function(index){
@@ -55,7 +53,6 @@ $(document).ready(function(){
     $(document).on('click', 'nav li', function(){
         dirtyFlag = 1;
         $('#wrap').addClass('dirtyField');
-        console.log(dirtyFlag);
     });
     
     var EditableSwitch = function() {
@@ -89,7 +86,7 @@ $(document).ready(function(){
     //  On page load, check if the Editable Flag is ON or OFF and display the proper content
     if (editable_flag === 0) {
         $('#dymanic_content').hide();
-        $('.toggle_delete_all, .toggle_empty_all, .revert_all').hide();
+        $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').hide();
         $('#readonly_container').show();
     }
     //  On page load, check if 'hasum' is true or not and make the proper adjustments
@@ -136,14 +133,14 @@ $(document).ready(function(){
                 $('#dymanic_content').show();
                 $('#readonly_container').hide();
             }
-            $('.toggle_delete_all, .toggle_empty_all, .revert_all').show();
+            $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').show();
             editable_flag = 1;
         } else {                                //  Make the component Non-Editable
             if (empty_all_flag === 0) {
                 $('#dymanic_content').hide();
                 $('#readonly_container').show();
             }
-            $('.toggle_delete_all, .toggle_empty_all, .revert_all').hide();
+            $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').hide();
             editable_flag = 0;
         }
     });
@@ -192,7 +189,6 @@ $(document).ready(function(){
     var $sufix = $('.has_sufix').val();
     var $um = $('.has_um').val();
     var revertedComponent = $('#items').html();        //  The content of the initial component
-    console.log(revertedComponent);
     //  Revert to initial state for the entire component
     $(document).on('click', '.revert_all', function(){
         $('.has_prefix').val($prefix);
@@ -342,13 +338,45 @@ $(document).ready(function(){
         $(this).closest('.item').find('.ve-text').val('');
     });
     
-    $('#wrap').on('click', function(){
-        $('#items').modal({
+    //  Open in modal window functionality
+    $(document).on('click', '.open_modal', function(){
+        $('<div/>', {id: 'generated_modal', class: 'items'}).appendTo('#wrap');     //  Creating the new modal
+        var items_content = $('#items').clone();                                 //  Get the content from the '#items' list by clonning the element
+        $('#generated_modal').html(items_content);                              //  Insert the content from the '#items' list into the generated modal
+        $('<button class="save">Save</button><button class="cancel">Cancel</button>').appendTo('#generated_modal');         //  Add 'Save' and'Cancel' buttons to the modal window
+        //  Since the .CLONE() jQuery method doesn't clone also the selected value of the <select> elements, we will do this separatelly
+        var selectedIndexItems = [];    //  A new Array for the selected values
+        $('#items select').each(function(){
+          selectedIndexItems.push($(this).prop('selectedIndex'));
+        });
+        $('#generated_modal select').each(function(index){
+          $(this).prop('selectedIndex', selectedIndexItems[index]);
+        });
+        
+        $('#generated_modal').modal({                                           //  Display the modal
             escapeClose: false,
             clickClose: true
         });
         return false;
     });
-   
+   //   Functionality for the 'Save' and 'Cancel' buttons from the Modal window
+    $(document).on('click', '.save', function(){
+        var new_generated_content = $('#generated_modal .items').clone();           // Get the new UL#items by clonning it
+        $('#items').replaceWith(new_generated_content);                             //  Replace the old UL#items with the one clonned above
+        //  Same as above - force the <select> elements to keep the new values
+        var selectedIndexModal = [];    //  A new Array for the selected values from the Module
+        $('#generated_modal select').each(function(){
+          selectedIndexModal.push($(this).prop('selectedIndex'));
+        });
+        $('#items select').each(function(index){
+          $(this).prop('selectedIndex', selectedIndexModal[index]);
+        });
+        $.modal.close();                                                            // Close the modal
+        $('#generated_modal').remove();
+    });
+    $(document).on('click', '.cancel', function(){
+        $.modal.close();                                                            // Close the modal
+        $('#generated_modal').remove();
+    }); 
     
 });

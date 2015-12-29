@@ -11,7 +11,7 @@
 #controlls {
     float: left;
 }
-#controlls nav, #items nav {
+#controlls nav, .items nav {
     position: relative;
     float: left;
 }
@@ -26,10 +26,10 @@
     padding: 5px;
     cursor: pointer;
 }
-#controlls nav ul, #items nav ul {
+#controlls nav ul, .items nav ul {
     position: absolute;
 }
-#items nav ul {
+.items nav ul {
     left: 10px;
     top: 24px;
     z-index: 10;
@@ -44,7 +44,7 @@ nav ul li {
     cursor: pointer;
     transform: scale(1.2);
 }
-#items nav ul li:hover {
+.items nav ul li:hover {
     background-color: #f73;
 }
 #controlls nav ul li:hover {
@@ -54,7 +54,7 @@ nav ul li {
     float: left;
     margin-left: 10px;
 }
-#items .menu_items {
+.items .menu_items {
     border-radius: 50%;
     background-color: orange;
     margin-bottom: 0;
@@ -65,14 +65,17 @@ nav ul li {
     padding: 5px;
     cursor: pointer;
 }
-#items {
+.items {
     float: left;
     margin-left: 10px;
 }
-#items li {
+.items.modal {
+    float: none;
+}
+.items li {
     margin-bottom: 10px;
 }
-#items .ve-text {
+.items .ve-text {
     margin-left: 10px;
 }
 .ui-icon-trash.delete_all {
@@ -93,7 +96,9 @@ nav ul li {
     margin: 0 10px;
     float: left;
 }
-
+.save {
+    margin: 20px 5% 0 33%;
+}
 
 
 
