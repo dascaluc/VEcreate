@@ -2,20 +2,20 @@ $(document).ready(function(){
     /*
      *  Retrieving the values from the 'data-*' attributes
      */
-    var changelistener = $('#controlls').data('changelistener');
-    //var initialValue = $('#controlls').val();
-    var editable = $('#controlls').data('editable');
-    var list = $('#controlls').data('list');
-    var toggle_empty = $('#controlls').data('empty');
-    var maxlist = $('#controlls').data('maxlist');
-    var minlist = $('#controlls').data('minlist');
-    var deletetable = $('#controlls').data('deletetable');
-    var revertable = $('#controlls').data('revertable');
-    var defaultUm = $('#controlls').data('defaultum');
-    var hasPrefix = $('#controlls').data('hasprefix');
-    var hasSufix = $('#controlls').data('hassufix');
-    var hasUm = $('#controlls').data('hasum');
-    var hasUmItem = $('#controlls').data('hasumitem');
+    var changelistener = $('.controlls').data('changelistener');
+    //var initialValue = $('.controlls').val();
+    var editable = $('.controlls').data('editable');
+    var list = $('.controlls').data('list');
+    var toggle_empty = $('.controlls').data('empty');
+    var maxlist = $('.controlls').data('maxlist');
+    var minlist = $('.controlls').data('minlist');
+    var deletetable = $('.controlls').data('deletetable');
+    var revertable = $('.controlls').data('revertable');
+    var defaultUm = $('.controlls').data('defaultum');
+    var hasPrefix = $('.controlls').data('hasprefix');
+    var hasSufix = $('.controlls').data('hassufix');
+    var hasUm = $('.controlls').data('hasum');
+    var hasUmItem = $('.controlls').data('hasumitem');
     // The readonly/editable flag - when this is 0 - the content is in readonly mode; when it's 1 - the content can be edited.
     var editable_flag = 0;
     var deleted_all_flag = 0;
@@ -86,7 +86,7 @@ $(document).ready(function(){
     //  On page load, check if the Editable Flag is ON or OFF and display the proper content
     if (editable_flag === 0) {
         $('#dymanic_content').hide();
-        $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').hide();
+        $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
         $('#readonly_container').show();
     }
     //  On page load, check if 'hasum' is true or not and make the proper adjustments
@@ -103,9 +103,28 @@ $(document).ready(function(){
     }
 
     //  Menu functionality
-    $(document).on('mouseover', 'nav', function(){
+    var menuFunc = function(){
+        if (editable_flag === 0) {
+            $('.menu').addClass('hidden');
+            $('.main_menu').removeClass('hidden');
+        } else {
+            $('.menu').removeClass('hidden');
+            //$('.main_menu').addClass('hidden');
+            $(document).on('mouseover', 'nav', function(){
+                $(this).find('.main_menu').removeClass('hidden');
+            }).on('mouseout', 'nav', function(){
+                $(this).find('.main_menu').addClass('hidden');
+            });
+        }
+        console.log("menuFunc was exectuted!");
+        console.log("editable_flag = " + editable_flag);
+    }
+    menuFunc();
+       
+    //  Individual item menu functionality
+    $(document).on('mouseover', '.item nav', function(){
         $(this).children('ul').removeClass('hidden');
-    }).on('mouseout', 'nav', function(){
+    }).on('mouseout', '.item nav', function(){
         $(this).children('ul').addClass('hidden');
     });
     
@@ -133,16 +152,20 @@ $(document).ready(function(){
                 $('#dymanic_content').show();
                 $('#readonly_container').hide();
             }
-            $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').show();
+            $('.controlls').find('ul').addClass('main_menu');
+            $('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').removeClass('hidden');
+            $('.main_menu').removeClass('hidden');
             editable_flag = 1;
         } else {                                //  Make the component Non-Editable
             if (empty_all_flag === 0) {
                 $('#dymanic_content').hide();
                 $('#readonly_container').show();
             }
-            $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').hide();
+            $('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
+            $('.main_menu').removeClass();
             editable_flag = 0;
         }
+        menuFunc();
     });
     
     //  Deleting the componennt (with the possibility to revert this delete action)
@@ -153,7 +176,7 @@ $(document).ready(function(){
             }
             $('#dymanic_content').hide();
             $('.ui-icon-trash.delete_all').removeClass('hidden');
-            $('.toggle_edit, .toggle_empty_all, .revert_all').hide();
+            $('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').hide();
             $('#delete_all_flag').val('true');
             deleted_all_flag = 1;
         } else {
@@ -162,7 +185,7 @@ $(document).ready(function(){
             } else {                        //  Un-Deleting a Non-Empty element
                 $('#dymanic_content').show();
             }
-            $('.toggle_edit, .toggle_empty_all, .revert_all').show();
+            $('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').show();
             $('.ui-icon-trash.delete_all').addClass('hidden');
             $('#delete_all_flag').val('false');  
             deleted_all_flag = 0;
