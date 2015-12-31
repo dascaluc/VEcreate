@@ -1,21 +1,24 @@
 $(document).ready(function(){
+    $('.container').each(function(){
+        
+    
     /*
      *  Retrieving the values from the 'data-*' attributes
      */
-    var changelistener = $('.controlls').data('changelistener');
+    var changelistener = $(this).find('.controlls').data('changelistener');
     //var initialValue = $('.controlls').val();
-    var editable = $('.controlls').data('editable');
-    var list = $('.controlls').data('list');
-    var toggle_empty = $('.controlls').data('empty');
-    var maxlist = $('.controlls').data('maxlist');
-    var minlist = $('.controlls').data('minlist');
-    var deletetable = $('.controlls').data('deletetable');
-    var revertable = $('.controlls').data('revertable');
-    var defaultUm = $('.controlls').data('defaultum');
-    var hasPrefix = $('.controlls').data('hasprefix');
-    var hasSufix = $('.controlls').data('hassufix');
-    var hasUm = $('.controlls').data('hasum');
-    var hasUmItem = $('.controlls').data('hasumitem');
+    var editable = $(this).find('.controlls').data('editable');
+    var list = $(this).find('.controlls').data('list');
+    var toggle_empty = $(this).find('.controlls').data('empty');
+    var maxlist = $(this).find('.controlls').data('maxlist');
+    var minlist = $(this).find('.controlls').data('minlist');
+    var deletetable = $(this).find('.controlls').data('deletetable');
+    var revertable = $(this).find('.controlls').data('revertable');
+    var defaultUm = $(this).find('.controlls').data('defaultum');
+    var hasPrefix = $(this).find('.controlls').data('hasprefix');
+    var hasSufix = $(this).find('.controlls').data('hassufix');
+    var hasUm = $(this).find('.controlls').data('hasum');
+    var hasUmItem = $(this).find('.controlls').data('hasumitem');
     // The readonly/editable flag - when this is 0 - the content is in readonly mode; when it's 1 - the content can be edited.
     var editable_flag = 0;
     var deleted_all_flag = 0;
@@ -26,17 +29,15 @@ $(document).ready(function(){
     //  Get the initial values for each input
     var initialValues = [];
     var initialValuesUMitem = [];
-    $('.ve-text').each(function(){
+    $(this).find('.ve-text').each(function(){
         initialValues.push($(this).val());
-        
         if (hasUmItem === true) {
             initialValuesUMitem.push($(this).closest('.item').find('.has_um_item').val());
         }
-        
     });
     //  Set the position of each item
     var setPosition = function(){
-        $('.ve-text').each(function(index){
+        $(this).find('.ve-text').each(function(index){
             var itemPosition = index + 1;
             $(this).closest('.item').find('.position').val(itemPosition);
         });
@@ -54,15 +55,15 @@ $(document).ready(function(){
         dirtyFlag = 1;
         $('#wrap').addClass('dirtyField');
     });
-    
+    var that = $(this);
     var EditableSwitch = function() {
         readonlyVal = '';       //  Empty the variable before each execution of the EditableSwitch function
         //  The readonly output text
         if (hasPrefix === true) {
-            readonlyVal += $('.has_prefix').val();
+            readonlyVal += that.find('.has_prefix').val();
         }
         readonlyVal += ' ';
-        $('.ve-text').each(function(){
+        that.find('.ve-text').each(function(){
             readonlyVal += ($(this).val());
             var hasUmItemVal = $(this).nextAll('.has_um_item');
             readonlyVal += ' ';
@@ -72,43 +73,43 @@ $(document).ready(function(){
             readonlyVal += ' // ';
         });
         if ((hasUm === true) && (hasUmItem != true)) {
-            readonlyVal += $('.has_um').val();
+            readonlyVal += that.find('.has_um').val();
         }
         readonlyVal += ' ';
         if (hasSufix === true) {
-            readonlyVal += $('.has_sufix').val();
+            readonlyVal += that.find('.has_sufix').val();
         }
         readonlyVal += ' ';
-        $('#readonly_container').html(readonlyVal);
+        that.find('.readonly_container').html(readonlyVal);
     }
     EditableSwitch();
     
     //  On page load, check if the Editable Flag is ON or OFF and display the proper content
     if (editable_flag === 0) {
-        $('#dymanic_content').hide();
-        $('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
-        $('#readonly_container').show();
+        $(this).find('.dymanic_content').hide();
+        $(this).find('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
+        $(this).find('.readonly_container').show();
     }
     //  On page load, check if 'hasum' is true or not and make the proper adjustments
     if (hasUm === true) {
         if (hasUmItem === true) {
             //  Only Has UM for each item exists
-            $('.has_um').remove();
+            $(this).find('.has_um').remove();
         } else {
             //  Only Has UM for the entire component exists
-            $('.has_um_item').remove();
+            $(this).find('.has_um_item').remove();
         }
     } else {
-        $('.has_um').remove();
+        $(this).find('.has_um').remove();
     }
 
     //  Menu functionality
     var menuFunc = function(){
         if (editable_flag === 0) {
-            $('.menu').addClass('hidden');
-            $('.main_menu').removeClass('hidden');
+            that.find('.menu').addClass('hidden');
+            that.find('.main_menu').removeClass('hidden');
         } else {
-            $('.menu').removeClass('hidden');
+            that.find('.menu').removeClass('hidden');
             //$('.main_menu').addClass('hidden');
             $(document).on('mouseover', 'nav', function(){
                 $(this).find('.main_menu').removeClass('hidden');
@@ -116,8 +117,6 @@ $(document).ready(function(){
                 $(this).find('.main_menu').addClass('hidden');
             });
         }
-        console.log("menuFunc was exectuted!");
-        console.log("editable_flag = " + editable_flag);
     }
     menuFunc();
        
@@ -132,13 +131,13 @@ $(document).ready(function(){
      *  Remove elements depending on the data-* attributes 
      */
     if (hasPrefix === false) {
-        $('.has_prefix').remove();
+        $(this).find('.has_prefix').remove();
     }
     if (hasSufix === false) {
-        $('.has_sufix').remove();
+        $(this).find('.has_sufix').remove();
     }
     if (hasUm === false) {
-        $('.has_um').remove();
+        $(this).find('.has_um').remove();
     }
     
      /*
@@ -147,22 +146,23 @@ $(document).ready(function(){
     // Readonly toggle mode
     $(document).on('click', '.toggle_edit', function(){
         EditableSwitch();
+        var $parent = $(this).closest('.container');
         if (editable_flag === 0) {              //  Make the component Editable
             if (empty_all_flag === 0) {
-                $('#dymanic_content').show();
-                $('#readonly_container').hide();
+                $parent.find('.dymanic_content').show();
+                $parent.find('.readonly_container').hide();
             }
-            $('.controlls').find('ul').addClass('main_menu');
-            $('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').removeClass('hidden');
-            $('.main_menu').removeClass('hidden');
+            $parent.find('.controlls').find('ul').addClass('main_menu');
+            $parent.find('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').removeClass('hidden');
+            $parent.find('.main_menu').removeClass('hidden');
             editable_flag = 1;
         } else {                                //  Make the component Non-Editable
             if (empty_all_flag === 0) {
-                $('#dymanic_content').hide();
-                $('#readonly_container').show();
+                $parent.find('.dymanic_content').hide();
+                $parent.find('.readonly_container').show();
             }
-            $('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
-            $('.main_menu').removeClass();
+            $parent.find('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
+            $parent.find('.main_menu').removeClass();
             editable_flag = 0;
         }
         menuFunc();
@@ -170,55 +170,58 @@ $(document).ready(function(){
     
     //  Deleting the componennt (with the possibility to revert this delete action)
     $(document).on('click', '.toggle_delete_all', function(){
+        var $parent = $(this).closest('.container');
         if (deleted_all_flag === 0) {
             if (empty_all_flag === 1) {     //  Deleting an Empty element
-                $('.ui-icon-cancel.empty_all').addClass('hidden');
+                $parent.find('.ui-icon-cancel.empty_all').addClass('hidden');
             }
-            $('#dymanic_content').hide();
-            $('.ui-icon-trash.delete_all').removeClass('hidden');
-            $('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').hide();
-            $('#delete_all_flag').val('true');
+            $parent.find('.dymanic_content').hide();
+            $parent.find('.ui-icon-trash.delete_all').removeClass('hidden');
+            $parent.find('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').hide();
+            $parent.find('.delete_all_flag').val('true');
             deleted_all_flag = 1;
         } else {
             if (empty_all_flag === 1) {     //  Un-Deleting an Empty element
-                $('.ui-icon-cancel.empty_all').removeClass('hidden');
+                $parent.find('.ui-icon-cancel.empty_all').removeClass('hidden');
             } else {                        //  Un-Deleting a Non-Empty element
-                $('#dymanic_content').show();
+                $parent.find('.dymanic_content').show();
             }
-            $('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').show();
-            $('.ui-icon-trash.delete_all').addClass('hidden');
-            $('#delete_all_flag').val('false');  
+            $parent.find('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').show();
+            $parent.find('.ui-icon-trash.delete_all').addClass('hidden');
+            $parent.find('.delete_all_flag').val('false');  
             deleted_all_flag = 0;
         }
     });
       
     //  Set/Unset Empty for the entire component
     $(document).on('click', '.toggle_empty_all', function(){
+        var $parent = $(this).closest('.container');
         if (empty_all_flag === 0) {
-            $('#dymanic_content').hide();
-            $('.ui-icon-cancel.empty_all').removeClass('hidden');
-            $('#empty_all_flag').val('true');
+            $parent.find('.dymanic_content').hide();
+            $parent.find('.ui-icon-cancel.empty_all').removeClass('hidden');
+            $parent.find('.empty_all_flag').val('true');
             empty_all_flag = 1;
         } else {
-            $('#dymanic_content').show();
-            $('.ui-icon-cancel.empty_all').addClass('hidden');
-            $('#empty_all_flag').val('false');
+            $parent.find('.dymanic_content').show();
+            $parent.find('.ui-icon-cancel.empty_all').addClass('hidden');
+            $parent.find('.empty_all_flag').val('false');
             empty_all_flag = 0;
         }
     });
     
     //  Initial values that will be used for tghe 'Revert all' functionality
-    var $prefix = $('.has_prefix').val();
-    var $sufix = $('.has_sufix').val();
-    var $um = $('.has_um').val();
-    var revertedComponent = $('#items').html();        //  The content of the initial component
+    var $prefix = $(this).find('.has_prefix').val();
+    var $sufix = $(this).find('.has_sufix').val();
+    var $um = $(this).find('.has_um').val();
+    var revertedComponent = $(this).find('.items').html();        //  The content of the initial component
     //  Revert to initial state for the entire component
     $(document).on('click', '.revert_all', function(){
-        $('.has_prefix').val($prefix);
-        $('.has_sufix').val($sufix);
-        $('.has_um').val($um);
+        var $parent = $(this).closest('.container');
+        $parent.find('.has_prefix').val($prefix);
+        $parent.find('.has_sufix').val($sufix);
+        $parent.find('.has_um').val($um);
         //$('.new_item').remove();
-        $('#items').html(revertedComponent);
+        $parent.find('.items').html(revertedComponent);
         total_li = minlist;
         setPlusMinus();
         setArrows();
@@ -233,7 +236,7 @@ $(document).ready(function(){
      */
     //  The function which sets how the items are moved
     var setArrows = function() {
-        var itemsList = $('.item');
+        var itemsList = that.find('.item');
         //  If the list has just ONE element, hide the DOWN arrow 
         if (itemsList.length === 1) {
             itemsList.find('.move_up').addClass('hidden');
@@ -259,12 +262,12 @@ $(document).ready(function(){
     //  The function which removes "+" and/or "-" depending on the number ot the items
     var setPlusMinus = function(){
         if (total_li <= minlist) {
-            $('.delete_item').addClass('hidden');
+            that.find('.delete_item').addClass('hidden');
         } else if (total_li >= maxlist) {
-            $('.add_more').addClass('hidden');
+            that.find('.add_more').addClass('hidden');
         } else {
-            $('.delete_item').removeClass('hidden');
-            $('.add_more').removeClass('hidden');
+            that.find('.delete_item').removeClass('hidden');
+            that.find('.add_more').removeClass('hidden');
         }
     }
     //  Call the function on page load
@@ -290,7 +293,8 @@ $(document).ready(function(){
     /*
      *  Adding a new element on click
      */
-    $(document).on('click', '.add_more', function(){          
+    $(document).on('click', '.add_more', function(){
+        var $parent = $(this).closest('.container');
         if (total_li < maxlist) {
             var newItem =   '<li class="item new_item">' +
                             '<nav>' +
@@ -319,7 +323,7 @@ $(document).ready(function(){
                     newItem += '<div class="clear"></div> ' +
                             '</li>';
             $(this).closest('.item').after(newItem);  //appending the new element right after the parent element of the clicked item
-            $('.default_um').val(defaultUm);
+            $parent.find('.default_um').val(defaultUm);
             total_li++;
             currentIdNumber++;
             setArrows();
@@ -363,20 +367,22 @@ $(document).ready(function(){
     
     //  Open in modal window functionality
     $(document).on('click', '.open_modal', function(){
-        $('<div/>', {id: 'generated_modal', class: 'items'}).appendTo('#wrap');     //  Creating the new modal
-        var items_content = $('#items').clone();                                 //  Get the content from the '#items' list by clonning the element
-        $('#generated_modal').html(items_content);                              //  Insert the content from the '#items' list into the generated modal
-        $('<button class="save">Save</button><button class="cancel">Cancel</button>').appendTo('#generated_modal');         //  Add 'Save' and'Cancel' buttons to the modal window
+        var $parent = $(this).closest('.container');
+        $('<div/>', {id: 'generated_modal', class: 'items'}).appendTo($parent);     //  Creating the new modal and append it to the current container
+        var items_content = $parent.find('.items').clone();                                 //  Get the content from the '.items' list by clonning the element
+        var $currentModal = $parent.find('#generated_modal');           //  Get the current modal
+        $currentModal.html(items_content);                          //  Insert the content from the '.items' list into the generated modal
+        $('<button class="save">Save</button><button class="cancel">Cancel</button>').appendTo($currentModal);         //  Add 'Save' and'Cancel' buttons to the modal window
         //  Since the .CLONE() jQuery method doesn't clone also the selected value of the <select> elements, we will do this separatelly
         var selectedIndexItems = [];    //  A new Array for the selected values
-        $('#items select').each(function(){
+        $parent.find('.items select').each(function(){
           selectedIndexItems.push($(this).prop('selectedIndex'));
         });
-        $('#generated_modal select').each(function(index){
+        $parent.find('#generated_modal select').each(function(index){
           $(this).prop('selectedIndex', selectedIndexItems[index]);
         });
         
-        $('#generated_modal').modal({                                           //  Display the modal
+        $($currentModal).modal({                                           //  Display the modal
             escapeClose: false,
             clickClose: true
         });
@@ -384,14 +390,14 @@ $(document).ready(function(){
     });
    //   Functionality for the 'Save' and 'Cancel' buttons from the Modal window
     $(document).on('click', '.save', function(){
-        var new_generated_content = $('#generated_modal .items').clone();           // Get the new UL#items by clonning it
-        $('#items').replaceWith(new_generated_content);                             //  Replace the old UL#items with the one clonned above
+        var new_generated_content = $('#generated_modal .items').clone();           // Get the new UL.items by clonning it
+        that.find('.items').replaceWith(new_generated_content);                             //  Replace the old UL.items with the one clonned above
         //  Same as above - force the <select> elements to keep the new values
         var selectedIndexModal = [];    //  A new Array for the selected values from the Module
         $('#generated_modal select').each(function(){
           selectedIndexModal.push($(this).prop('selectedIndex'));
         });
-        $('#items select').each(function(index){
+        that.find('.items select').each(function(index){
           $(this).prop('selectedIndex', selectedIndexModal[index]);
         });
         $.modal.close();                                                            // Close the modal
@@ -401,5 +407,5 @@ $(document).ready(function(){
         $.modal.close();                                                            // Close the modal
         $('#generated_modal').remove();
     }); 
-    
+    }); //  End of $('.container').each()
 });

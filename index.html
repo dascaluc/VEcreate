@@ -26,9 +26,9 @@
                 data-defaultum="2m"
                 data-deletetable="true"
                 data-revertable="true">
-                <input type="hidden" id="empty_all_flag" value="false">
-                <input type="hidden" id="delete_all_flag" value="false">
-                <input type="hidden" id="dirty_all_flag" value="false">
+                <input type="hidden" class="empty_all_flag" value="false">
+                <input type="hidden" class="delete_all_flag" value="false">
+                <input type="hidden" class="dirty_all_flag" value="false">
                 <!--   Menu for the entire component   -->
                 <nav>
                     <span class="menu ui-icon ui-icon-gear"></span>
@@ -43,16 +43,16 @@
                 <!--  Initially hidden icons and fields  -->
                 <span class="ui-icon ui-icon-trash delete_all hidden"></span>
                 <span class="ui-icon ui-icon-cancel empty_all hidden"></span>
-                <span id="readonly_container" style="display:none;"></span>
+                <span class="readonly_container" style="display:none;"></span>
             </div>
-            <div id="dymanic_content">
+            <div class="dymanic_content">
                 <select class="has_prefix">
                     <option value="1m" selected>1m</option>
                     <option value="2m">2m</option>
                     <option value="3m">3m</option>
                 </select>
                 <!--  Populated with LIs from jQuery  -->
-                <ul id="items" class="items">
+                <ul class="items">
                     <!--  LI  -->
                     <li class="item">
                         <!--  Menu for the each item  -->
@@ -124,6 +124,122 @@
                 <div class="clear"></div>
            </div>
         </div><!-- End element container -->
+        
+        <!---   --->
+        <div id="container2" class="container">
+            <div class="controlls"
+                data-changelistener="true"
+                data-hasum="true"
+                data-hasumitem="true"
+                data-empty="true"
+                data-editable="true"
+                data-list="true"
+                data-hasprefix="true"
+                data-hassufix="true"
+                data-minlist="2"
+                data-maxlist="6"
+                data-defaultum="2m"
+                data-deletetable="true"
+                data-revertable="true">
+                <input type="hidden" class="empty_all_flag" value="false">
+                <input type="hidden" class="delete_all_flag" value="false">
+                <input type="hidden" class="dirty_all_flag" value="false">
+                <!--   Menu for the entire component   -->
+                <nav>
+                    <span class="menu ui-icon ui-icon-gear"></span>
+                    <ul class="main_menu">
+                        <li title="Edit mode" class="toggle_edit ui-icon ui-icon-pencil"></li>
+                        <li title="Delete" class="toggle_delete_all ui-icon ui-icon-trash"></li>
+                        <li title="Empty" class="toggle_empty_all ui-icon ui-icon-cancel"></li>
+                        <li title="Revert to initial" class="revert_all ui-icon ui-icon-arrowrefresh-1-e"></li>
+                        <li title="Open modal" class="open_modal ui-icon ui-icon-newwin"></li>
+                    </ul>
+                </nav>
+                <!--  Initially hidden icons and fields  -->
+                <span class="ui-icon ui-icon-trash delete_all hidden"></span>
+                <span class="ui-icon ui-icon-cancel empty_all hidden"></span>
+                <span class="readonly_container" style="display:none;"></span>
+            </div>
+            <div class="dymanic_content">
+                <select class="has_prefix">
+                    <option value="1m" selected>1m</option>
+                    <option value="2m">2m</option>
+                    <option value="3m">3m</option>
+                </select>
+                <!--  Populated with LIs from jQuery  -->
+                <ul class="items">
+                    <!--  LI  -->
+                    <li class="item">
+                        <!--  Menu for the each item  -->
+                        <nav>
+                            <span class="menu_items ui-icon ui-icon-gear"></span>
+                            <ul class="hidden">
+                                <li title="Delete" class="delete_item ui-icon ui-icon-minus"></li>
+                                <li title="Empty" class="toggle_empty ui-icon ui-icon-cancel"></li>
+                                <li title="Revert to initial" class="revert_to_initial ui-icon ui-icon-arrowrefresh-1-e"></li>
+                                <li title="Move Up" class="move_up ui-icon ui-icon-arrowthick-1-n"></li>
+                                <li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>
+                                <li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>
+                            </ul>
+                        </nav>
+                        <!--  Input field with hidden flags -->
+                        <input type="text" class="ve-text" id="item_1" value="initial value 12"/>
+                        <input type="hidden" class="position" value="1"/>
+                        <input type="hidden" class="empty_flag" value="false" />
+                        <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
+                        <input type="hidden" class="deleted_flag" value="false" />
+                        <select class="has_um_item">
+                            <option value="1m">1m</option>
+                            <option value="2m" selected>2m</option>
+                            <option value="3m">3m</option>
+                        </select>
+                        <div class="clear"></div>
+                        <!--  End of Input field with hidden flags  -->
+                    </li>
+                  
+                    <li class="item">
+                        <!--  Menu for the each item  -->
+                        <nav>
+                            <span class="menu_items ui-icon ui-icon-gear"></span>
+                            <ul class="hidden">
+                                <li title="Delete" class="delete_item ui-icon ui-icon-minus"></li>
+                                <li title="Empty" class="toggle_empty ui-icon ui-icon-cancel"></li>
+                                <li title="Revert to initial" class="revert_to_initial ui-icon ui-icon-arrowrefresh-1-e"></li>
+                                <li title="Move Up" class="move_up ui-icon ui-icon-arrowthick-1-n"></li>
+                                <li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>
+                                <li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>
+                            </ul>
+                        </nav>
+                        <!--  Input field with hidden flags -->
+                        <input type="text" class="ve-text" id="item_2" value="initial value 22"/>
+                        <input type="hidden" class="position" value="2"/>
+                        <input type="hidden" class="empty_flag" value="false" />
+                        <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
+                        <input type="hidden" class="deleted_flag" value="false" />
+                        <select class="has_um_item">
+                            <option value="1m">1m</option>
+                            <option value="2m" selected>2m</option>
+                            <option value="3m">3m</option>
+                        </select>
+                        <div class="clear"></div>
+                        <!--  End of Input field with hidden flags  -->
+                    </li>
+                    <!--  End of LI  -->
+                </ul>
+                <select class="has_um">
+                        <option value="1m">1m</option>
+                        <option value="2m" selected>2m</option>
+                        <option value="3m">3m</option>
+                </select>
+                <select class="has_sufix">
+                    <option value="1m">1m</option>
+                        <option value="2m">2m</option>
+                        <option value="3m" selected>3m</option>
+                </select>
+                <div class="clear"></div>
+           </div>
+        </div><!-- End element container -->
+        
     </div><!-- End wrap -->
     
 
