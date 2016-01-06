@@ -1,12 +1,10 @@
 $(document).ready(function(){
-    $('.container').each(function(){
-        
-    
     /*
      *  Retrieving the values from the 'data-*' attributes
      */
     var changelistener = $(this).find('.controlls').data('changelistener');
     //var initialValue = $('.controlls').val();
+    var type = $(this).find('.controlls').data('type');
     var editable = $(this).find('.controlls').data('editable');
     var list = $(this).find('.controlls').data('list');
     var toggle_empty = $(this).find('.controlls').data('empty');
@@ -26,20 +24,34 @@ $(document).ready(function(){
     var dirtyFlag = 0;
     var total_li = $('.item').length;           // Get the LI number
     var currentIdNumber = minlist + 1;    //  Get the number of the minimum items, add 1 and store it as the item ID
-    //  Get the initial values for each input
-    var initialValues = [];
-    var initialValuesUMitem = [];
-    $(this).find('.ve-text').each(function(){
-        initialValues.push($(this).val());
-        if (hasUmItem === true) {
-            initialValuesUMitem.push($(this).closest('.item').find('.has_um_item').val());
-        }
+    var that = $(this);
+    //  Get the initial values for each input and select in order to have these values to be used for the individual revert functionality
+    var initialValuesCont = {};             //  Creating the global object which will hold the initial values from the inputs
+    var initialValuesContSelect = {};       //  Creating the global object which will hold the initial values from the selects
+    $('.container').each(function(index){
+        var initialValues = [];             //  Creating the local array which will hold the initial values from each input
+        var initialValuesUMitem = [];       //  Creating the local array which will hold the initial values from each select
+        $(this).find('.item').each(function(){
+            initialValues.push($(this).find('.ve-text').val());     //  Push each item values into an array that will be created for each element
+            if (hasUmItem === true) {
+                initialValuesUMitem.push($(this).closest('.item').find('.has_um_item').val());      //  Same as above but for select elements
+            }
+        });
+        initialValuesCont["v" + index] = initialValues;                 //  Store the arrays declared above as elements of the global object - inputs
+        initialValuesContSelect["v" + index] = initialValuesUMitem;     //  Store the arrays declared above as elements of the global object - selects
     });
+
+    $('.container').each(function(){
+        var multilang = $(this).find('.controlls').data('multilang');
+    });
+    
     //  Set the position of each item
     var setPosition = function(){
-        $(this).find('.ve-text').each(function(index){
-            var itemPosition = index + 1;
-            $(this).closest('.item').find('.position').val(itemPosition);
+        $('.container').each(function(){
+            $(this).find('.ve-text').each(function(index){
+                var itemPosition = index + 1;
+                $(this).closest('.item').find('.position').val(itemPosition);
+            });
         });
     }
     //  Call the function on page load
@@ -49,76 +61,73 @@ $(document).ready(function(){
      //  Dirty flag
     $(document).on('change', 'input, select', function(){
         dirtyFlag = 1;
-        $('#wrap').addClass('dirtyField');
+        $(this).find('.container').addClass('dirtyField');
     });
     $(document).on('click', 'nav li', function(){
         dirtyFlag = 1;
-        $('#wrap').addClass('dirtyField');
+        $(this).find('.container').addClass('dirtyField');
     });
-    var that = $(this);
+   
     var EditableSwitch = function() {
-        readonlyVal = '';       //  Empty the variable before each execution of the EditableSwitch function
-        //  The readonly output text
-        if (hasPrefix === true) {
-            readonlyVal += that.find('.has_prefix').val();
-        }
-        readonlyVal += ' ';
-        that.find('.ve-text').each(function(){
-            readonlyVal += ($(this).val());
-            var hasUmItemVal = $(this).nextAll('.has_um_item');
-            readonlyVal += ' ';
-            if (hasUmItemVal.val() != undefined) {
-                readonlyVal += hasUmItemVal.val();
+        $('.container').each(function(){
+            var hasPrefix = $(this).find('.controlls').data('hasprefix');
+            var hasSufix = $(this).find('.controlls').data('hassufix');
+            var hasUm = $(this).find('.controlls').data('hasum');
+            var hasUmItem = $(this).find('.controlls').data('hasumitem');
+            readonlyVal = '';       //  Empty the variable before each execution of the EditableSwitch function
+            //  The readonly output text
+            if (hasPrefix === true) {
+                readonlyVal += that.find('.has_prefix').val();
             }
-            readonlyVal += ' // ';
+            readonlyVal += ' ';
+            $(this).find('.ve-text').each(function(){
+                readonlyVal += ($(this).val());
+                var hasUmItemVal = $(this).nextAll('.has_um_item');
+                readonlyVal += ' ';
+                if (hasUmItemVal.val() != undefined) {
+                    readonlyVal += hasUmItemVal.val();
+                }
+                readonlyVal += ' // ';
+            });
+            if ((hasUm === true) && (hasUmItem != true)) {
+                readonlyVal += that.find('.has_um').val();
+            }
+            readonlyVal += ' ';
+            if (hasSufix === true) {
+                readonlyVal += that.find('.has_sufix').val();
+            }
+            readonlyVal += ' ';
+            $(this).find('.readonly_container').html(readonlyVal);
         });
-        if ((hasUm === true) && (hasUmItem != true)) {
-            readonlyVal += that.find('.has_um').val();
-        }
-        readonlyVal += ' ';
-        if (hasSufix === true) {
-            readonlyVal += that.find('.has_sufix').val();
-        }
-        readonlyVal += ' ';
-        that.find('.readonly_container').html(readonlyVal);
     }
     EditableSwitch();
     
     //  On page load, check if the Editable Flag is ON or OFF and display the proper content
     if (editable_flag === 0) {
-        $(this).find('.dymanic_content').hide();
-        $(this).find('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
-        $(this).find('.readonly_container').show();
+        $('.container').each(function(){
+            $(this).find('.dymanic_content').addClass('hidden');
+            $(this).find('.toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
+            $(this).find('.readonly_container').removeClass('hidden');
+        });
     }
     //  On page load, check if 'hasum' is true or not and make the proper adjustments
-    if (hasUm === true) {
-        if (hasUmItem === true) {
-            //  Only Has UM for each item exists
+    $('.container').each(function(){
+        var hasUm = $(this).find('.controlls').data('hasum');
+        var hasUmItem = $(this).find('.controlls').data('hasumitem');
+        if (hasUm === true) {
+            if (hasUmItem === true) {
+                //  Only Has UM for each item exists
+                $(this).find('.has_um').remove();
+            } else {
+                //  Only Has UM for the entire component exists
+                $(this).find('.has_um_item').remove();
+            }
+        } else {
             $(this).find('.has_um').remove();
-        } else {
-            //  Only Has UM for the entire component exists
-            $(this).find('.has_um_item').remove();
         }
-    } else {
-        $(this).find('.has_um').remove();
-    }
-
-    //  Menu functionality
-    var menuFunc = function(){
-        if (editable_flag === 0) {
-            that.find('.menu').addClass('hidden');
-            that.find('.main_menu').removeClass('hidden');
-        } else {
-            that.find('.menu').removeClass('hidden');
-            //$('.main_menu').addClass('hidden');
-            $(document).on('mouseover', 'nav', function(){
-                $(this).find('.main_menu').removeClass('hidden');
-            }).on('mouseout', 'nav', function(){
-                $(this).find('.main_menu').addClass('hidden');
-            });
-        }
-    }
-    menuFunc();
+    });
+    //  Hidding the menu icons on page load
+    $('.container').find('.menu').addClass('hidden');
        
     //  Individual item menu functionality
     $(document).on('mouseover', '.item nav', function(){
@@ -130,43 +139,55 @@ $(document).ready(function(){
     /*
      *  Remove elements depending on the data-* attributes 
      */
-    if (hasPrefix === false) {
-        $(this).find('.has_prefix').remove();
-    }
-    if (hasSufix === false) {
-        $(this).find('.has_sufix').remove();
-    }
-    if (hasUm === false) {
-        $(this).find('.has_um').remove();
-    }
-    
+    $('.container').each(function(){
+        var hasUm = $(this).find('.controlls').data('hasum');
+        var hasPrefix = $(this).find('.controlls').data('hasprefix');
+        var hasSufix = $(this).find('.controlls').data('hassufix');
+        if (hasPrefix === false) {
+            $(this).find('.has_prefix').remove();
+        }
+        if (hasSufix === false) {
+            $(this).find('.has_sufix').remove();
+        }
+        if (hasUm === false) {
+            $(this).find('.has_um').remove();
+        }
+    });
      /*
      *  Buttons Fuctionality
      */
     // Readonly toggle mode
     $(document).on('click', '.toggle_edit', function(){
-        EditableSwitch();
         var $parent = $(this).closest('.container');
-        if (editable_flag === 0) {              //  Make the component Editable
-            if (empty_all_flag === 0) {
-                $parent.find('.dymanic_content').show();
-                $parent.find('.readonly_container').hide();
-            }
+        var dc = $parent.find('.dymanic_content');
+        var rc = $parent.find('.readonly_container');
+        EditableSwitch();
+        if (dc.hasClass('hidden')) {
+            dc.removeClass('hidden');
+            rc.addClass('hidden');
             $parent.find('.controlls').find('ul').addClass('main_menu');
             $parent.find('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').removeClass('hidden');
-            $parent.find('.main_menu').removeClass('hidden');
-            editable_flag = 1;
-        } else {                                //  Make the component Non-Editable
-            if (empty_all_flag === 0) {
-                $parent.find('.dymanic_content').hide();
-                $parent.find('.readonly_container').show();
-            }
+            $parent.find('.main_menu').addClass('hidden');
+        } else {
+            dc.addClass('hidden');
+            rc.removeClass('hidden');
             $parent.find('.menu, .toggle_delete_all, .toggle_empty_all, .revert_all, .open_modal').addClass('hidden');
             $parent.find('.main_menu').removeClass();
-            editable_flag = 0;
         }
-        menuFunc();
     });
+    
+    $(document).on('mouseover', '.controlls nav', function(){
+            var xc = $(this).closest('.container').find('.readonly_container');
+            if (xc.hasClass('hidden')) {
+                $(this).closest('.container').find('.main_menu').removeClass('hidden');
+            }
+        }).on('mouseout', '.controlls nav', function(){
+        var xc = $(this).closest('.container').find('.readonly_container');
+            if (xc.hasClass('hidden')) {
+                $(this).closest('.container').find('.main_menu').addClass('hidden');
+            }
+        });
+    
     
     //  Deleting the componennt (with the possibility to revert this delete action)
     $(document).on('click', '.toggle_delete_all', function(){
@@ -175,7 +196,7 @@ $(document).ready(function(){
             if (empty_all_flag === 1) {     //  Deleting an Empty element
                 $parent.find('.ui-icon-cancel.empty_all').addClass('hidden');
             }
-            $parent.find('.dymanic_content').hide();
+            $parent.find('.dymanic_content').addClass('hidden');
             $parent.find('.ui-icon-trash.delete_all').removeClass('hidden');
             $parent.find('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').hide();
             $parent.find('.delete_all_flag').val('true');
@@ -184,7 +205,7 @@ $(document).ready(function(){
             if (empty_all_flag === 1) {     //  Un-Deleting an Empty element
                 $parent.find('.ui-icon-cancel.empty_all').removeClass('hidden');
             } else {                        //  Un-Deleting a Non-Empty element
-                $parent.find('.dymanic_content').show();
+                $parent.find('.dymanic_content').removeClass('hidden');
             }
             $parent.find('.toggle_edit, .toggle_empty_all, .revert_all, .open_modal').show();
             $parent.find('.ui-icon-trash.delete_all').addClass('hidden');
@@ -197,40 +218,43 @@ $(document).ready(function(){
     $(document).on('click', '.toggle_empty_all', function(){
         var $parent = $(this).closest('.container');
         if (empty_all_flag === 0) {
-            $parent.find('.dymanic_content').hide();
+            $parent.find('.dymanic_content').addClass('hidden');
             $parent.find('.ui-icon-cancel.empty_all').removeClass('hidden');
             $parent.find('.empty_all_flag').val('true');
             empty_all_flag = 1;
         } else {
-            $parent.find('.dymanic_content').show();
+            $parent.find('.dymanic_content').removeClass('hidden');
             $parent.find('.ui-icon-cancel.empty_all').addClass('hidden');
             $parent.find('.empty_all_flag').val('false');
             empty_all_flag = 0;
         }
     });
     
+    var revertAll = [];
     //  Initial values that will be used for tghe 'Revert all' functionality
-    var $prefix = $(this).find('.has_prefix').val();
-    var $sufix = $(this).find('.has_sufix').val();
-    var $um = $(this).find('.has_um').val();
-    var revertedComponent = $(this).find('.items').html();        //  The content of the initial component
-    //  Revert to initial state for the entire component
-    $(document).on('click', '.revert_all', function(){
-        var $parent = $(this).closest('.container');
-        $parent.find('.has_prefix').val($prefix);
-        $parent.find('.has_sufix').val($sufix);
-        $parent.find('.has_um').val($um);
-        //$('.new_item').remove();
-        $parent.find('.items').html(revertedComponent);
-        total_li = minlist;
-        setPlusMinus();
-        setArrows();
-        //setPosition();
-        
-        dirtyFlag = 0;
-        $('#wrap').removeClass('dirtyField');
+    $('.container').each(function(){
+        var $prefix = $(this).find('.has_prefix').val();
+        var $sufix = $(this).find('.has_sufix').val();
+        var $um = $(this).find('.has_um').val();
+        var revertedComponent = $(this).find('.items').html();        //  The content of the initial component
+        revertAll.push(revertedComponent);
+        //  Revert to initial state for the entire component
+        $(document).on('click', '.revert_all', function(){
+            var currentID = $(this).closest('.container').attr('id');       //  get the ID of the current container
+            var currentIDnumber = currentID.match(/[\d]+$/) - 1;                //  get the number from the ID and substract 1
+            var $parent = $(this).closest('.container');
+            $parent.find('.has_prefix').val($prefix);
+            $parent.find('.has_sufix').val($sufix);
+            $parent.find('.has_um').val($um);
+            $parent.find('.items').html(revertAll[currentIDnumber]);        //  revert the component to the initial state
+            total_li = minlist;
+            setPlusMinus();
+            setArrows();
+            dirtyFlag = 0;
+            $(this).find('.container').removeClass('dirtyField');
+        });
     });
-    
+
      /*
      *   The MOVE UP and MOVE DOWN functionality for the list items
      */
@@ -261,13 +285,37 @@ $(document).ready(function(){
 
     //  The function which removes "+" and/or "-" depending on the number ot the items
     var setPlusMinus = function(){
-        if (total_li <= minlist) {
-            that.find('.delete_item').addClass('hidden');
-        } else if (total_li >= maxlist) {
-            that.find('.add_more').addClass('hidden');
-        } else {
-            that.find('.delete_item').removeClass('hidden');
-            that.find('.add_more').removeClass('hidden');
+        if (clickedElem == null) {                  //  Normal view
+            $('.container').each(function(){
+                var totalsLi = $(this).find('.items .item').length;     //  Get the total number of the list items for each element
+                var minlistElem = $(this).find('.controlls').data('minlist');       //  Get the minlist value for each item
+                var maxlistElem = $(this).find('.controlls').data('maxlist');       //  Get the maxlist value for each item
+                if (totalsLi <= minlistElem) {
+                    $(this).find('.delete_item').addClass('hidden');
+                } else if (totalsLi >= maxlistElem) {
+                    $(this).find('.add_more').addClass('hidden');
+                } else {
+                    $(this).find('.delete_item').removeClass('hidden');
+                    $(this).find('.add_more').removeClass('hidden');
+                }
+            });
+        } else {                                    //  Modal view
+            $parent3 = $('#generated_modal .items');
+            var parent2 = clickedElem.closest('.container');
+            var totalsLi = $parent3.find('.item').length;     //  Get the total number of the list items for each element
+            var minlistElem = parent2.find('.controlls').data('minlist');       //  Get the minlist value for each item
+            var maxlistElem = parent2.find('.controlls').data('maxlist');       //  Get the maxlist value for each item
+            console.log("totalsLi: " + totalsLi);
+            console.log("minlistElem: " + minlistElem);
+            console.log("maxlistElem: " + maxlistElem);
+            if (totalsLi <= minlistElem) {
+                $parent3.find('.delete_item').addClass('hidden');
+            } else if (totalsLi >= maxlistElem) {
+                $parent3.find('.add_more').addClass('hidden');
+            } else {
+                $parent3.find('.delete_item').removeClass('hidden');
+                $parent3.find('.add_more').removeClass('hidden');
+            }
         }
     }
     //  Call the function on page load
@@ -294,8 +342,18 @@ $(document).ready(function(){
      *  Adding a new element on click
      */
     $(document).on('click', '.add_more', function(){
-        var $parent = $(this).closest('.container');
-        if (total_li < maxlist) {
+        var $parent = $(this).closest('.items');
+        var $parent2 = $(this).closest('.container');
+        var totalsLi = $parent.find('.item').length;     //  Get the total number of the list items for each element
+        if (clickedElem == null) {
+            var maxlistElem = $parent2.find('.controlls').data('maxlist');       //  Get the maxlist value for each item
+            var multilang = $parent2.find('.controlls').data('multilang');       //  Get the data-multilang value
+            //alert(multilang);
+        } else {
+            var maxlistElem = clickedElem.closest('.container').find('.controlls').data('maxlist');       //  Get the maxlist value for each item
+            var multilang = clickedElem.closest('.container').find('.controlls').data('multilang');       //  Get the data-multilang value
+        }
+        if (totalsLi < maxlistElem) {
             var newItem =   '<li class="item new_item">' +
                             '<nav>' +
                                 '<span class="menu_items ui-icon ui-icon-gear"></span>' +
@@ -307,12 +365,20 @@ $(document).ready(function(){
                                     '<li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>' +
                                     '<li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>' +
                                 '</ul>' +
-                            '</nav>' +
-                                '<input type="text" id="item_' + currentIdNumber + '" class="ve-text" value="" />' +
-                                '<input type="hidden" class="position" value=""/>' +
+                            '</nav>';
+                            if (type === 'input') {
+                                newItem += '<input type="text" id="item_' + currentIdNumber + '" class="ve-text" value="" />';
+                            }
+                            if (type === 'textarea') {
+                                newItem += '<textarea id="item_' + currentIdNumber + '" class="ve-text"></textarea>';
+                            }
+                            newItem += '<input type="hidden" class="position" value=""/>' +
                                 '<input type="hidden" class="empty_flag" value="false" />' +
                                 '<span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>' +
                                 '<input type="hidden" class="deleted_flag" value="false" />';
+                            if (multilang === true) {
+                                newItem += '<span class="multilang"></span>';
+                            }
                                 if (hasUmItem === true) {
                     newItem += '<select class="has_um_item default_um" style="margin-left:4px;">' +
                                     '<option value="1m">1m</option>' +
@@ -324,13 +390,12 @@ $(document).ready(function(){
                             '</li>';
             $(this).closest('.item').after(newItem);  //appending the new element right after the parent element of the clicked item
             $parent.find('.default_um').val(defaultUm);
-            total_li++;
+            totalsLi++;
             currentIdNumber++;
             setArrows();
             setPosition();
             setPlusMinus();
-            
-        }else{
+        } else {
         }
     });
     
@@ -356,15 +421,18 @@ $(document).ready(function(){
     //  There were created 2 "revert" functions: one for the initial input, which may have an initial value and one for the elements added dynamically with the "+" button because they are empty by default.
     //  Revert function for the initial input to the initial value
     $(document).on('click', '.revert_to_initial', function(){
-        var currentID = $(this).closest('.item').find('.ve-text').attr('id');       //  get the ID of the current input
-        var currentIDnumber = currentID.match(/[\d]+$/);                            //  get the number from the ID name. At this moment, the ID of an input field is set as 'item_number' (ex: item_1, item_2 ...)
-        $(this).closest('.item').find('.ve-text').val(initialValues[currentIDnumber-1]);    //replace the value from the input field with the initial value we got on page load
+        var currentID = clickedElem.closest('.container').attr('id');       //  get the ID of the current container
+        var currentIDnumber = currentID.match(/[\d]+$/) - 1;                //  get the number from the ID and substract 1
+        var classArr = $(this).closest('.item').find('.ve-text').attr("class").match(/[\w-]*item[\w-]*/g);          //  get item_number for the current input
+        var classArrNumber = classArr[0].match(/[\d]+$/) - 1;                  //   get the number from the Item_number class name and substract 1
+        var initVal = initialValuesCont["v" + currentIDnumber][classArrNumber];     //  get the reverted value to the initial value from tha field
+        $(this).closest('.item').find('.ve-text').val(initVal);                 //  set the reverted value as the the value retrieved above
     });
     //  Revert function for the inputs created dinamically with the "+" button
      $(document).on('click', '.dynamic_revert', function(){
         $(this).closest('.item').find('.ve-text').val('');
     });
-    
+    var clickedElem = null;         //  declarating this as a global variable to be used on the 'open in modal' functionality
     //  Open in modal window functionality
     $(document).on('click', '.open_modal', function(){
         var $parent = $(this).closest('.container');
@@ -376,36 +444,61 @@ $(document).ready(function(){
         //  Since the .CLONE() jQuery method doesn't clone also the selected value of the <select> elements, we will do this separatelly
         var selectedIndexItems = [];    //  A new Array for the selected values
         $parent.find('.items select').each(function(){
-          selectedIndexItems.push($(this).prop('selectedIndex'));
+          selectedIndexItems.push($(this).prop('selectedIndex'));           //  get the selected items from the initial selects
         });
-        $parent.find('#generated_modal select').each(function(index){
-          $(this).prop('selectedIndex', selectedIndexItems[index]);
+        $('#generated_modal select').each(function(index){
+          $(this).prop('selectedIndex', selectedIndexItems[index]);         //  place the items retrieved above into the selects from the modal
         });
-        
         $($currentModal).modal({                                           //  Display the modal
             escapeClose: false,
             clickClose: true
         });
+        clickedElem = $(this);          //  get a reference to the clicked 'open in modal' item
         return false;
     });
    //   Functionality for the 'Save' and 'Cancel' buttons from the Modal window
     $(document).on('click', '.save', function(){
+        //alert(clickedElem);
         var new_generated_content = $('#generated_modal .items').clone();           // Get the new UL.items by clonning it
-        that.find('.items').replaceWith(new_generated_content);                             //  Replace the old UL.items with the one clonned above
+        clickedElem.closest('.container').find('.items').replaceWith(new_generated_content);                             //  Replace the old UL.items with the one clonned above
         //  Same as above - force the <select> elements to keep the new values
         var selectedIndexModal = [];    //  A new Array for the selected values from the Module
         $('#generated_modal select').each(function(){
-          selectedIndexModal.push($(this).prop('selectedIndex'));
+          selectedIndexModal.push($(this).prop('selectedIndex'));           //  get the selected items from the selects from the modal
         });
-        that.find('.items select').each(function(index){
-          $(this).prop('selectedIndex', selectedIndexModal[index]);
+        clickedElem.closest('.container').find('.items select').each(function(index){
+          $(this).prop('selectedIndex', selectedIndexModal[index]);         //  place the items retrieved above into the initial selects
         });
         $.modal.close();                                                            // Close the modal
-        $('#generated_modal').remove();
+        $('#generated_modal').remove();     
+        $('#generated_modal').remove();     //  This is used twice because there are 2 divs with the same ID generated from the modal script
+        clickedElem = null;                 //  clear the value for clickedElem as we go back to the initial display (out of the modal window)
     });
     $(document).on('click', '.cancel', function(){
         $.modal.close();                                                            // Close the modal
         $('#generated_modal').remove();
     }); 
-    }); //  End of $('.container').each()
+
+/*
+ *  Multi language modal
+ */
+    $(document).on('click', '.multilang', function(){
+        var $parent = $(this).closest('.item');
+        $('<div/>', {id: 'generated_lang_modal', class: 'lang_items'}).appendTo($parent);     //  Creating the new modal and append it to the current container
+        var items_content = $parent.find('.langs').clone();                                 //  Get the content from the '.items' list by clonning the element
+        alert(items_content);
+        var $currentModal = $parent.find('#generated_lang_modal');           //  Get the current modal
+        $currentModal.html(items_content);                          //  Insert the content from the '.items' list into the generated modal
+        $('<button class="save_lang">Save</button><button class="cancel_lang">Cancel</button>').appendTo($currentModal);         //  Add 'Save' and'Cancel' buttons to the modal window
+        $('#generated_lang_modal .langs').removeClass('hidden');
+        $($currentModal).modal({                                           //  Display the modal
+            escapeClose: false,
+            clickClose: true
+        });
+        clickedElem = $(this);          //  get a reference to the clicked 'open in modal' item
+        return false;
+    });
+ 
+ 
+ 
 });

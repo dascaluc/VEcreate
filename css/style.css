@@ -8,9 +8,13 @@
 .clear {
     clear: both;
 }
+.container {
+    margin-bottom: 10px;
+}
+/*
 .controlls {
     float: left;
-}
+}*/
 .controlls nav, .items nav {
     position: relative;
     float: left;
@@ -28,11 +32,11 @@
 }
 .controlls nav ul, .items nav ul {
     position: absolute;
+    z-index: 10;
 }
 .items nav ul {
     left: 10px;
     top: 24px;
-    z-index: 10;
 }
 nav ul li {
     background-color: #bbb;
@@ -96,28 +100,17 @@ nav ul li {
     margin: 0 10px;
     float: left;
 }
-.save {
+#generated_modal .save {
     margin: 20px 5% 0 33%;
 }
-
-
-
-
-.newEl {
-    padding: 20px;
-    background: #bbb;
-    border: 1px solid #000;
+#generated_lang_modal .save_lang {
+    margin: 20px 5% 0 0;
 }
-.newEl span {
-    cursor: pointer;
-    border: 1px solid #000;
-    padding: 5px;
-    margin-right: 5px;
-    margin-bottom: 10px;
-    display: inline-block;
+.modal {
+    width: auto;
 }
-.newEl .main_input {
-    margin-right: 5px;
+#generated_modal .items {
+    float: none;
 }
 ul {
     margin: 0;
@@ -129,10 +122,20 @@ li {
 .hidden {
     display: none !important;
 }
-.newEl .move_up.new,
-.newEl .move_down.new{
+.multilang {
+    width: 20px;
+    height: 20px;
+    background: #ff0;
+    border-radius: 50%;
     display: inline-block;
+    cursor: pointer;
+    margin-left: 3px;
 }
+#generated_lang_modal .lang {
+    display: block;
+}
+
+
 /*
 .ui-icon-trash {
     padding: 0 !important;

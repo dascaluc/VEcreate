@@ -1,9 +1,9 @@
 <html>
 <head>
     <title>VE create component</title>
-    <link type="text/css" rel="stylesheet" href='css/style.css'>
     <link type="text/css" rel="stylesheet" href='css/jquery-ui.css'>
     <link type="text/css" rel="stylesheet" href='css/jquery.modal.css'>
+    <link type="text/css" rel="stylesheet" href='css/style.css'>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script src="js/jquery.modal.min.js"></script>
@@ -13,6 +13,7 @@
     <div id="wrap">
         <div id="container1" class="container">
             <div class="controlls"
+                data-type="input"
                 data-changelistener="true"
                 data-hasum="true"
                 data-hasumitem="true"
@@ -24,6 +25,7 @@
                 data-minlist="2"
                 data-maxlist="6"
                 data-defaultum="2m"
+                data-multilang = "true"
                 data-deletetable="true"
                 data-revertable="true">
                 <input type="hidden" class="empty_all_flag" value="false">
@@ -43,7 +45,7 @@
                 <!--  Initially hidden icons and fields  -->
                 <span class="ui-icon ui-icon-trash delete_all hidden"></span>
                 <span class="ui-icon ui-icon-cancel empty_all hidden"></span>
-                <span class="readonly_container" style="display:none;"></span>
+                <span class="readonly_container"></span>
             </div>
             <div class="dymanic_content">
                 <select class="has_prefix">
@@ -68,14 +70,29 @@
                             </ul>
                         </nav>
                         <!--  Input field with hidden flags -->
-                        <input type="text" class="ve-text" id="item_1" value="initial value 1"/>
+                        <input type="text" class="ve-text item_1" value="initial value 1"/>
                         <input type="hidden" class="position" value="1"/>
                         <input type="hidden" class="empty_flag" value="false" />
                         <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
                         <input type="hidden" class="deleted_flag" value="false" />
+                        <span class="multilang"></span>
+                        <div class="langs hidden">
+                            <span class="lang lang-en"><span class="flag-en"></span><input type="text" class="content-en" /></span>
+                            <span class="lang lang-fr"><span class="flag-fr"></span><input type="text" class="content-fr" /></span>
+                            <span class="lang lang-ro"><span class="flag-ro"></span><input type="text" class="content-ro" /></span>
+                            <span class="lang lang-es"><span class="flag-es"></span><input type="text" class="content-es" /></span>
+                            <span class="lang lang-de"><span class="flag-de"></span><input type="text" class="content-de" /></span>
+                            <span class="lang lang-ru"><span class="flag-ru"></span><input type="text" class="content-ru" /></span>
+                            <span class="lang lang-it"><span class="flag-it"></span><input type="text" class="content-it" /></span>
+                            <span class="lang lang-de"><span class="flag-de"></span><input type="text" class="content-de" /></span>
+                            <span class="lang lang-ar"><span class="flag-ar"></span><input type="text" class="content-ar" /></span>
+                            <span class="lang lang-bg"><span class="flag-bg"></span><input type="text" class="content-bg" /></span>
+                            <span class="lang lang-gr"><span class="flag-gr"></span><input type="text" class="content-gr" /></span>
+                            <span class="lang lang-sb"><span class="flag-sb"></span><input type="text" class="content-sb" /></span>
+                        </div>
                         <select class="has_um_item">
-                            <option value="1m">1m</option>
-                            <option value="2m" selected>2m</option>
+                            <option value="1m" selected>1m</option>
+                            <option value="2m">2m</option>
                             <option value="3m">3m</option>
                         </select>
                         <div class="clear"></div>
@@ -96,7 +113,7 @@
                             </ul>
                         </nav>
                         <!--  Input field with hidden flags -->
-                        <input type="text" class="ve-text" id="item_2" value="initial value 2"/>
+                        <input type="text" class="ve-text item_2" value="initial value 2"/>
                         <input type="hidden" class="position" value="2"/>
                         <input type="hidden" class="empty_flag" value="false" />
                         <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
@@ -122,7 +139,8 @@
                         <option value="3m" selected>3m</option>
                 </select>
                 <div class="clear"></div>
-           </div>
+            </div>
+            <div class="clear"></div>
         </div><!-- End element container -->
         
         <!---   --->
@@ -137,7 +155,7 @@
                 data-hasprefix="true"
                 data-hassufix="true"
                 data-minlist="2"
-                data-maxlist="6"
+                data-maxlist="4"
                 data-defaultum="2m"
                 data-deletetable="true"
                 data-revertable="true">
@@ -158,7 +176,7 @@
                 <!--  Initially hidden icons and fields  -->
                 <span class="ui-icon ui-icon-trash delete_all hidden"></span>
                 <span class="ui-icon ui-icon-cancel empty_all hidden"></span>
-                <span class="readonly_container" style="display:none;"></span>
+                <span class="readonly_container"></span>
             </div>
             <div class="dymanic_content">
                 <select class="has_prefix">
@@ -183,7 +201,7 @@
                             </ul>
                         </nav>
                         <!--  Input field with hidden flags -->
-                        <input type="text" class="ve-text" id="item_1" value="initial value 12"/>
+                        <input type="text" class="ve-text item_1" value="initial value 12"/>
                         <input type="hidden" class="position" value="1"/>
                         <input type="hidden" class="empty_flag" value="false" />
                         <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
@@ -211,7 +229,7 @@
                             </ul>
                         </nav>
                         <!--  Input field with hidden flags -->
-                        <input type="text" class="ve-text" id="item_2" value="initial value 22"/>
+                        <input type="text" class="ve-text item_2" value="initial value 22"/>
                         <input type="hidden" class="position" value="2"/>
                         <input type="hidden" class="empty_flag" value="false" />
                         <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
@@ -237,12 +255,9 @@
                         <option value="3m" selected>3m</option>
                 </select>
                 <div class="clear"></div>
-           </div>
+            </div>
+            <div class="clear"></div>
         </div><!-- End element container -->
-        
     </div><!-- End wrap -->
-    
-
-
 </body>
 </html>
