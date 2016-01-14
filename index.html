@@ -1,23 +1,28 @@
 <html>
 <head>
     <title>VE create component</title>
+    
+<!--    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
+    
     <link type="text/css" rel="stylesheet" href='css/jquery-ui.css'>
     <link type="text/css" rel="stylesheet" href='css/jquery.modal.css'>
     <link type="text/css" rel="stylesheet" href='css/style.css'>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script src="js/jquery.modal.min.js"></script>
+<!--    <script src="js/jquery.modal.min.js"></script>-->
     <script src="js/script.js"></script>
 </head>
 <body>
-    <div id="wrap">
+    <div id="wrap" data-lang="en">
         <div id="container1" class="container">
             <div class="controlls"
-                data-type="input"
                 data-changelistener="true"
                 data-hasum="true"
                 data-hasumitem="true"
-                data-empty="true"
+                data-elem="input"
+                data-empty="false"
                 data-editable="true"
                 data-list="true"
                 data-hasprefix="true"
@@ -35,7 +40,8 @@
                 <nav>
                     <span class="menu ui-icon ui-icon-gear"></span>
                     <ul class="main_menu">
-                        <li title="Edit mode" class="toggle_edit ui-icon ui-icon-pencil"></li>
+                        <li title="Edit mode" class="edit_mode ui-icon ui-icon-pencil"></li>
+                        <li title="Readonly mode mode" class="readonly_mode ui-icon ui-icon-extlink hidden"></li>
                         <li title="Delete" class="toggle_delete_all ui-icon ui-icon-trash"></li>
                         <li title="Empty" class="toggle_empty_all ui-icon ui-icon-cancel"></li>
                         <li title="Revert to initial" class="revert_all ui-icon ui-icon-arrowrefresh-1-e"></li>
@@ -43,8 +49,8 @@
                     </ul>
                 </nav>
                 <!--  Initially hidden icons and fields  -->
-                <span class="ui-icon ui-icon-trash delete_all hidden"></span>
-                <span class="ui-icon ui-icon-cancel empty_all hidden"></span>
+                <span class="revert_delete_all hidden"><span class="ui-icon ui-icon-trash"></span><span class="ui-icon ui-icon-arrowreturn-1-s delete_all_action"></span></span>
+                <span class="revert_empty_all hidden">EMPTY <span class="revert_all_action">{ }</span></span>
                 <span class="readonly_container"></span>
             </div>
             <div class="dymanic_content">
@@ -64,8 +70,8 @@
                                 <li title="Delete" class="delete_item ui-icon ui-icon-minus"></li>
                                 <li title="Empty" class="toggle_empty ui-icon ui-icon-cancel"></li>
                                 <li title="Revert to initial" class="revert_to_initial ui-icon ui-icon-arrowrefresh-1-e"></li>
-                                <li title="Move Up" class="move_up ui-icon ui-icon-arrowthick-1-n"></li>
-                                <li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>
+                                <li title="Move Up" class="move_up ui-icon ui-icon-carat-1-n"></li>
+                                <li title="Move Down" class="move_down ui-icon ui-icon-carat-1-s"></li>
                                 <li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>
                             </ul>
                         </nav>
@@ -77,18 +83,18 @@
                         <input type="hidden" class="deleted_flag" value="false" />
                         <span class="multilang"></span>
                         <div class="langs hidden">
-                            <span class="lang lang-en"><span class="flag-en"></span><input type="text" class="content-en" /></span>
-                            <span class="lang lang-fr"><span class="flag-fr"></span><input type="text" class="content-fr" /></span>
-                            <span class="lang lang-ro"><span class="flag-ro"></span><input type="text" class="content-ro" /></span>
-                            <span class="lang lang-es"><span class="flag-es"></span><input type="text" class="content-es" /></span>
-                            <span class="lang lang-de"><span class="flag-de"></span><input type="text" class="content-de" /></span>
-                            <span class="lang lang-ru"><span class="flag-ru"></span><input type="text" class="content-ru" /></span>
-                            <span class="lang lang-it"><span class="flag-it"></span><input type="text" class="content-it" /></span>
-                            <span class="lang lang-de"><span class="flag-de"></span><input type="text" class="content-de" /></span>
-                            <span class="lang lang-ar"><span class="flag-ar"></span><input type="text" class="content-ar" /></span>
-                            <span class="lang lang-bg"><span class="flag-bg"></span><input type="text" class="content-bg" /></span>
-                            <span class="lang lang-gr"><span class="flag-gr"></span><input type="text" class="content-gr" /></span>
-                            <span class="lang lang-sb"><span class="flag-sb"></span><input type="text" class="content-sb" /></span>
+                            <span class="lang lang-en"><label>English</label><span class="flag-en"></span><input type="text" class="content-en" value="initial value 1" /></span>
+                            <span class="lang lang-fr"><label>Francois</label><span class="flag-fr"></span><input type="text" class="content-fr" value="" /></span>
+                            <span class="lang lang-ro"><label>Romanian</label><span class="flag-ro"></span><input type="text" class="content-ro" value="" /></span>
+                            <span class="lang lang-es"><label>Espanol</label><span class="flag-es"></span><input type="text" class="content-es" value="" /></span>
+                            <span class="lang lang-de"><label>German</label><span class="flag-de"></span><input type="text" class="content-de" value="" /></span>
+                            <span class="lang lang-ru"><label>Russian</label><span class="flag-ru"></span><input type="text" class="content-ru" value="" /></span>
+                            <span class="lang lang-it"><label>Italis</label><span class="flag-it"></span><input type="text" class="content-it" value="" /></span>
+                            <span class="lang lang-de"><label>Danish</label><span class="flag-de"></span><input type="text" class="content-de" value="" /></span>
+                            <span class="lang lang-ar"><label>Armenian</label><span class="flag-ar"></span><input type="text" class="content-ar" value="" /></span>
+                            <span class="lang lang-bg"><label>Bulgarian</label><span class="flag-bg"></span><input type="text" class="content-bg" value="" /></span>
+                            <span class="lang lang-gr"><label>Greek</label><span class="flag-gr"></span><input type="text" class="content-gr" value="" /></span>
+                            <span class="lang lang-sb"><label>Serbian</label><span class="flag-sb"></span><input type="text" class="content-sb" value="" /></span>
                         </div>
                         <select class="has_um_item">
                             <option value="1m" selected>1m</option>
@@ -107,8 +113,8 @@
                                 <li title="Delete" class="delete_item ui-icon ui-icon-minus"></li>
                                 <li title="Empty" class="toggle_empty ui-icon ui-icon-cancel"></li>
                                 <li title="Revert to initial" class="revert_to_initial ui-icon ui-icon-arrowrefresh-1-e"></li>
-                                <li title="Move Up" class="move_up ui-icon ui-icon-arrowthick-1-n"></li>
-                                <li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>
+                                <li title="Move Up" class="move_up ui-icon ui-icon-carat-1-n"></li>
+                                <li title="Move Down" class="move_down ui-icon ui-icon-carat-1-s"></li>
                                 <li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>
                             </ul>
                         </nav>
@@ -118,6 +124,21 @@
                         <input type="hidden" class="empty_flag" value="false" />
                         <span class="ui-icon ui-icon-cancel empty_item" style="display:none;"></span>
                         <input type="hidden" class="deleted_flag" value="false" />
+                        <span class="multilang"></span>
+                        <div class="langs hidden">
+                            <span class="lang lang-en"><label>English</label><span class="flag-en"></span><input type="text" class="content-en" value="initial value 1" /></span>
+                            <span class="lang lang-fr"><label>Francois</label><span class="flag-fr"></span><input type="text" class="content-fr" value="" /></span>
+                            <span class="lang lang-ro"><label>Romanian</label><span class="flag-ro"></span><input type="text" class="content-ro" value="" /></span>
+                            <span class="lang lang-es"><label>Espanol</label><span class="flag-es"></span><input type="text" class="content-es" value="" /></span>
+                            <span class="lang lang-de"><label>German</label><span class="flag-de"></span><input type="text" class="content-de" value="" /></span>
+                            <span class="lang lang-ru"><label>Russian</label><span class="flag-ru"></span><input type="text" class="content-ru" value="" /></span>
+                            <span class="lang lang-it"><label>Italis</label><span class="flag-it"></span><input type="text" class="content-it" value="" /></span>
+                            <span class="lang lang-de"><label>Danish</label><span class="flag-de"></span><input type="text" class="content-de" value="" /></span>
+                            <span class="lang lang-ar"><label>Armenian</label><span class="flag-ar"></span><input type="text" class="content-ar" value="" /></span>
+                            <span class="lang lang-bg"><label>Bulgarian</label><span class="flag-bg"></span><input type="text" class="content-bg" value="" /></span>
+                            <span class="lang lang-gr"><label>Greek</label><span class="flag-gr"></span><input type="text" class="content-gr" value="" /></span>
+                            <span class="lang lang-sb"><label>Serbian</label><span class="flag-sb"></span><input type="text" class="content-sb" value="" /></span>
+                        </div>
                         <select class="has_um_item">
                             <option value="1m">1m</option>
                             <option value="2m" selected>2m</option>
@@ -149,6 +170,7 @@
                 data-changelistener="true"
                 data-hasum="true"
                 data-hasumitem="true"
+                data-elem="input"
                 data-empty="true"
                 data-editable="true"
                 data-list="true"
@@ -166,7 +188,8 @@
                 <nav>
                     <span class="menu ui-icon ui-icon-gear"></span>
                     <ul class="main_menu">
-                        <li title="Edit mode" class="toggle_edit ui-icon ui-icon-pencil"></li>
+                        <li title="Edit mode" class="edit_mode ui-icon ui-icon-pencil"></li>
+                        <li title="Readonly mode" class="readonly_mode ui-icon ui-icon-extlink hidden"></li>
                         <li title="Delete" class="toggle_delete_all ui-icon ui-icon-trash"></li>
                         <li title="Empty" class="toggle_empty_all ui-icon ui-icon-cancel"></li>
                         <li title="Revert to initial" class="revert_all ui-icon ui-icon-arrowrefresh-1-e"></li>
@@ -174,8 +197,8 @@
                     </ul>
                 </nav>
                 <!--  Initially hidden icons and fields  -->
-                <span class="ui-icon ui-icon-trash delete_all hidden"></span>
-                <span class="ui-icon ui-icon-cancel empty_all hidden"></span>
+                <span class="revert_delete_all hidden"><span class="ui-icon ui-icon-trash"></span><span class="ui-icon ui-icon-arrowreturn-1-s delete_all_action"></span><span class="clear"></span></span>
+                <span class="revert_empty_all hidden">EMPTY <span class="revert_all_action">{ }</span></span>
                 <span class="readonly_container"></span>
             </div>
             <div class="dymanic_content">
@@ -195,8 +218,8 @@
                                 <li title="Delete" class="delete_item ui-icon ui-icon-minus"></li>
                                 <li title="Empty" class="toggle_empty ui-icon ui-icon-cancel"></li>
                                 <li title="Revert to initial" class="revert_to_initial ui-icon ui-icon-arrowrefresh-1-e"></li>
-                                <li title="Move Up" class="move_up ui-icon ui-icon-arrowthick-1-n"></li>
-                                <li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>
+                                <li title="Move Up" class="move_up ui-icon ui-icon-carat-1-n"></li>
+                                <li title="Move Down" class="move_down ui-icon ui-icon-carat-1-s"></li>
                                 <li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>
                             </ul>
                         </nav>
@@ -223,8 +246,8 @@
                                 <li title="Delete" class="delete_item ui-icon ui-icon-minus"></li>
                                 <li title="Empty" class="toggle_empty ui-icon ui-icon-cancel"></li>
                                 <li title="Revert to initial" class="revert_to_initial ui-icon ui-icon-arrowrefresh-1-e"></li>
-                                <li title="Move Up" class="move_up ui-icon ui-icon-arrowthick-1-n"></li>
-                                <li title="Move Down" class="move_down ui-icon ui-icon-arrowthick-1-s"></li>
+                                <li title="Move Up" class="move_up ui-icon ui-icon-carat-1-n"></li>
+                                <li title="Move Down" class="move_down ui-icon ui-icon-carat-1-s"></li>
                                 <li title="Add another item" class="add_more ui-icon ui-icon-plus"></li>
                             </ul>
                         </nav>

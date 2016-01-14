@@ -8,13 +8,19 @@
 .clear {
     clear: both;
 }
+.hidden {
+    display: none !important;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+li {
+    list-style-type: none;
+}
 .container {
     margin-bottom: 10px;
 }
-/*
-.controlls {
-    float: left;
-}*/
 .controlls nav, .items nav {
     position: relative;
     float: left;
@@ -25,18 +31,21 @@
     margin-bottom: 0;
     width: 10px;
     height: 10px;
-    transform: scale(1.2);
     border: 1px solid #FFF;
     padding: 5px;
     cursor: pointer;
 }
-.controlls nav ul, .items nav ul {
+.controlls nav ul {
     position: absolute;
     z-index: 10;
 }
 .items nav ul {
-    left: 10px;
-    top: 24px;
+    left: 5px;
+    top: 22px;
+    position: absolute;
+    z-index: 10;
+    background: #bbb;
+    padding: 0 5px;
 }
 nav ul li {
     background-color: #bbb;
@@ -46,10 +55,9 @@ nav ul li {
     margin: 5px 3px;
     width: 18px;
     cursor: pointer;
-    transform: scale(1.2);
 }
 .items nav ul li:hover {
-    background-color: #f73;
+    background-color: #aaa;
 }
 .controlls nav ul li:hover {
     background-color: yellow;
@@ -64,7 +72,6 @@ nav ul li {
     margin-bottom: 0;
     width: 10px;
     height: 10px;
-    transform: scale(1.2);
     border: 1px solid #FFF;
     padding: 5px;
     cursor: pointer;
@@ -76,19 +83,17 @@ nav ul li {
 .items.modal {
     float: none;
 }
-.items li {
-    margin-bottom: 10px;
-}
 .items .ve-text {
     margin-left: 10px;
 }
+.item {
+    margin-bottom: 7px;
+}
 .ui-icon-trash.delete_all {
-    transform: scale(2.5);
     margin: 0 15px;
     float: left;
 }
 .ui-icon-cancel.empty_all {
-    transform: scale(2.5);
     margin: 0 30px;
     float: left;
 }
@@ -96,7 +101,6 @@ nav ul li {
     margin-left: 30px;
 }
 .ui-icon-cancel.empty_item {
-    transform: scale(2.5);
     margin: 0 10px;
     float: left;
 }
@@ -112,15 +116,16 @@ nav ul li {
 #generated_modal .items {
     float: none;
 }
-ul {
-    margin: 0;
-    padding: 0;
+
+.revert_empty_all {
+    margin-left: 10px;
+    background: #FFF;
+    color: #000;
+    padding: 0 3px;
 }
-li {
-    list-style-type: none;
-}
-.hidden {
-    display: none !important;
+.revert_all_action,
+.delete_all_action {
+    cursor: pointer;
 }
 .multilang {
     width: 20px;
@@ -134,18 +139,22 @@ li {
 #generated_lang_modal .lang {
     display: block;
 }
-
-
-/*
-.ui-icon-trash {
-    padding: 0 !important;
-    transform: scale(2.5);
-    border: none !important;
-    margin: 5px 15px 0 0 !important;
+span[class^="flag"] {
+    width: 20px;
+    height: 20px;
+    background: orange;
+    display: inline-block;
+    margin-right: 10px;
 }
-.ui-icon-cancel {
-    border: medium none !important;
-    margin: 5px 15px 0 0 !important;
-    padding: 0 !important;
-    transform: scale(2.5);
-}*/
+label {
+    display: inline-block;
+    min-width: 90px;
+}
+.revert_delete_all {
+    display: block;
+    margin-left: 30px;
+}
+.revert_delete_all .ui-icon-trash,
+.delete_all_action {
+    float: left;
+}
